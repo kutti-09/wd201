@@ -1,0 +1,225 @@
+<html>
+
+<head lang="en">
+    <title>Registration Form</title>
+
+    <style>
+        form {
+            background-color: rgb(91, 157, 167);
+            width: fit-content;
+            margin: 20px;
+            padding: 50px;
+            border: 4px solid #103b36;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 25px;
+            font-weight: lighter;
+        }
+
+
+        input[type=text],
+        input[type=password],
+        input[type=email],
+        input[type=date] {
+            width: 100%;
+            padding: 10px;
+            font-weight: lighter;
+            font-size: 25px;
+            margin-bottom: 30px;
+            border: 3px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            text-align: left;
+            justify-content: center;
+            margin-left: 2px;
+        }
+
+        input[type=checkbox] {
+            width: 20px;
+            font-size: 25px;
+            padding: 20px;
+
+        }
+
+        button {
+            background-color: #267629;
+            color: white;
+            padding: 20px 40px;
+            font-weight: bold;
+            font-size: 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .ftable {
+            font-size: 20px;
+            padding-left: 3.0rem;
+            padding-right: 3.0rem;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: rgb(215, 196, 196);
+            padding: 10px 6px 8px 6px;
+            margin-top: 5px;
+            border-color: rgba(58, 53, 53, 0.2);
+            border-radius: 0.5rem;
+            box-shadow: rgba(0, 0, 0, 0.25);
+            border-width: 1px;
+        }
+
+        .stable {
+            margin: auto
+        }
+
+        .ttable {
+            font-size: 20px;
+            font-weight: 655;
+            font-size: 1.900rem;
+            text-align: center;
+            line-height: 1.5;
+            line-height: 3.45rem;
+        }
+
+        td {
+            font-size: 20px;
+            padding-right: 3rem;
+            padding-left: 3rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            border-width: 1px;
+            border-style: solid;
+            border-color: cornflowerblue;
+        }
+
+        th {
+            font-size: 22px;
+            padding-right: 2rem;
+            padding-left: 2rem;
+        }
+    </style>
+    <script>
+        let userform = document.getElementById("first-form");
+        const dInput = document.getElementById("dob");
+
+        dInput.addEventListener('input', (event) => {
+            const dateofbirth = new Date(event.target.value);
+            const presentdate = new Date();
+            const ageofuser = presentdate.getFullYear() - dateofbirth.getFullYear();
+
+            if ((ageofuser < 18) || ageofuser > 55) {
+                dInput.setCustomValidity('Please enter a valid dob between 18 and 55.');
+            }
+            else {
+                dInput.setCustomValidity('');
+            }
+        });
+
+        const getentries = () => {
+            let userentries = localStorage.getItem("entriesofuser");
+            if (userentries) {
+                userentries = JSON.parse(userentries);
+            }
+            else {
+                userentries = [];
+            }
+            return userentries;
+        }
+        let userdata = getentries();
+
+        const showentries = () => {
+            const entries = getentries();
+            const tabentries = entries.map((entry) => {
+                const nameCell = `<td>${entry.username}</td>`;
+                const emailCell = `<td>${entry.useremail}</td>`;
+                const passwordCell = `<td>${entry.userpassword}</td>`;
+                const dobCell = `<td>${entry.userdocument}</td>`;
+                const acceptTermsCell = `<td>${entry.userat}</td>`;
+                const row = `<tr>${nameCell} ${emailCell} ${passwordCell} ${dobCell} ${acceptTermsCell}</tr>`;
+                return row;
+            }).join("\n");
+
+            const table =
+                `<table class="table-auto w-full">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>dob</th>
+            <th>Accepted terms?</th>
+        </tr>${tabentries}
+    </table>`;
+
+            let userdetails = document.getElementById("entriesofuser");
+            userdetails.innerHTML = table;
+        }
+        const saveform = (event) => {
+            event.preventDefault();
+            const username = document.getElementById("name").value;
+            const useremail = document.getElementById("email").value;
+            const userpassword = document.getElementById("password").value;
+            const userdocument = document.getElementById("dob").value;
+            const userat = document.getElementById("checkbox").checked;
+            const entry = {
+                username,
+                useremail,
+                userpassword,
+                userdocument,
+                userat
+            }
+            userdata.push(entry);
+            localStorage.setItem("entriesofuser", JSON.stringify(userdata));
+            showentries();
+        }
+
+        userform.addEventListener("submit", saveform);
+
+        showentries();
+    </script>
+</head>
+
+<body>
+    <div>
+        <form id="first-form">
+            <h1>REGISTRATION FORM</h1>
+            <label for="name">Name</label>
+            <input required type="text" id="name" name="name">
+            <br>
+
+            <label for="email">Email</label>
+            <input required type="email" id="email" name="email">
+            <br>
+
+            <label for="password">Password</label>
+            <input required type="password" name="password" id="password">
+            <br>
+
+            <label>Date of Birth</label>
+            <input required type="date" id="dob" name="dob">
+            <br>
+
+            <label for="checkbox">Accepted terms? </label>
+            <input required type="checkbox" id="checkbox" name="checkbox">
+            <br><br></br>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div id="ftable">
+        <div id="stable">
+            <h2 id="ttable">Entries of users</h2>
+            <div id="entriesofuser"></div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
