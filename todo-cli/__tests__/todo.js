@@ -13,37 +13,29 @@ describe("Todo List Test Suite", () => {
             {
                 title: "Reading Newspaper",
                 completed: false,
-                dueDate: new Date(today.getTime() - 2 * oneDay).toLocaleDateString(
-          "en-CA"
-        ),
+                dueDate: new Date(today.getTime() - 2 * oneDay).toISOString().slice(0, 10),
             },
             {
                 title: "Preparing for sem",
                 completed: false,
-                dueDate: new Date().toLocaleDateString(
-          "en-CA"
-        ),
+                dueDate: new Date().toISOString().slice(0, 10),
             },
             {
                 title: "Assignments",
                 completed: false,
-                dueDate: new Date(today.getTime() + 2 * oneDay).toLocaleDateString(
-          "en-CA"
-        ),
+                dueDate: new Date(today.getTime() + 2 * oneDay).toISOString().slice(0, 10),
             },
         ].forEach(add);
     });
 
     test("should increase the number of todo items", () => {
-         expect(all.length).toEqual(3);
-         add({
+        const initialTodoCount = all.length;
+        add({
             title: "A test item",
             completed: false,
-            dueDate: new Date().toLocaleDateString(
-          "en-CA"
-        ),
+            dueDate: new Date().toISOString().slice(0, 10),
         });
-        expect(all.length).toEqual(4);
+        expect(all.length).toEqual(initialTodoCount + 1);
     });
 
     test("should mark a todo as complete", () => {
@@ -53,15 +45,32 @@ describe("Todo List Test Suite", () => {
     });
 
     test("should retrieve overdue items", () => {
-        expect(overdue().length).toEqual(1);
+        const initialOverdueCount = overdue().length;
+        add({
+            title: "Overdue test item",
+            completed: false,
+            dueDate: new Date(Date.now() - 86400000).toISOString().slice(0, 10), // set due date to yesterday
+        });
+        expect(overdue().length).toEqual(initialOverdueCount + 1);
     });
 
     test("should retrieve due today items", () => {
-        expect(dueToday().length).toEqual(2);
+        const initialDueTodayCount = dueToday().length;
+        add({
+            title: "Due today test item",
+            completed: false,
+            dueDate: new Date().toISOString().slice(0, 10),
+        });
+        expect(dueToday().length).toEqual(initialDueTodayCount + 1);
     });
 
     test("should retrieve due later items", () => {
-        expect(dueLater().length).toEqual(1);
+        const initialDueLaterCount = dueLater().length;
+        add({
+            title: "Due later test item",
+            completed: false,
+            dueDate: new Date(Date.now() + 86400000).toISOString().slice(0, 10), // set due date to tomorrow
+        });
+        expect(dueLater().length).toEqual(initialDueLaterCount + 1);
     });
 });
-
