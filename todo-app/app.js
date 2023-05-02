@@ -3,7 +3,23 @@ const app = express();
 const { Todo } = require("./models");
 const bodypaser = require("body-parser");
 app.use(bodypaser.json());
+const path = require("path")
 
+app.set("view engine", "ejs");
+app.get("/", async (request, response) => {
+    const allTodos = await Todo.getTodos();
+    if (request.accepts("html")) {
+        response.render('index', {
+            allTodos
+        });
+
+    }
+    else {
+        response.json({
+            allTodos
+        })
+    }
+});
 app.get("/todos", async (request, response) => {
     console.log("Todo items", response.body);
     try {
@@ -16,7 +32,7 @@ app.get("/todos", async (request, response) => {
         return response.status(422).json(error);
     }
 });
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.post("/todos", async (request, response) => {
     console.log("creating a todo", request.body);
     try {
