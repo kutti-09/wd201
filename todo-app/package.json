@@ -6,7 +6,9 @@
   "scripts": {
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "test": "NODE_ENV=test jest --detectOpenHandles",
-    "prepare": "cd .. && husky install todo-cli/.husky"
+    "prepare": "cd .. && husky install todo-cli/.husky",
+    "start": "nodemon -e js,ejs",
+    "start:prod": "node index.js"
   },
   "author": "JAne Doe",
   "license": "ISC",
@@ -18,5 +20,8 @@
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.8",
     "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "ejs": "^3.1.9"
   }
 }
