@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use strict';
 const {
   Model
@@ -13,20 +12,22 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false })
+
+    static addTodo({ title, dueDate }){
+      return this.create({ title: title, dueDate: dueDate, completed: false})
     }
+
     static getTodos() {
       return this.findAll();
     }
 
     markAsCompleted() {
-      return this.update({ completed: true })
+      return this.update({ completed: true})
     }
   }
   Todo.init({
     title: DataTypes.STRING,
-    dueDate: DataTypes.DATEONLY,
+    duedate: DataTypes.DATEONLY,
     completed: DataTypes.BOOLEAN
   }, {
     sequelize,
