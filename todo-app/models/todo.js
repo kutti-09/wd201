@@ -11,49 +11,65 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
     static addTodo({ title, dueDate }) {
+      if (!title) {
+        throw new Error("Title is required.");
+      }
+      if (!dueDate) {
+        throw new Error("Due date is required.");
+      }
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
-
     static getTodos() {
       return this.findAll();
     }
-
-    markAsCompleted() {
-      return this.update({ completed: true });
-    }
-
     static getoverdueTodos() {
-      const date = new Date();
       return this.findAll({
         where: {
+          completed: false,
           dueDate: {
-            [Op.lt]: date,
+            [Op.lt]: new Date().toISOString().split("T")[0],
           },
         },
       });
     }
     static getdueTodayTodos() {
-      const date = new Date();
       return this.findAll({
         where: {
+          completed: false,
           dueDate: {
-            [Op.eq]: date,
+            [Op.eq]: new Date().toISOString().split("T")[0],
           },
         },
       });
     }
-    static getdueLaterTodos() {
-      const date = new Date();
+    static async getdueLaterTodos() {
       return this.findAll({
         where: {
+          completed: false,
           dueDate: {
-            [Op.gt]: date,
-          },
+            [Op.gt]: new Date().toISOString().split("T")[0],
+          }
         },
       });
     }
-
-
+    static async remove(id) {
+      return this.destroy({
+        where: {
+          id,
+        },
+      });
+    }
+    static async getCompletedTodos() {
+      return this.findAll({
+        where: {
+          completed: true,
+        },
+        order: [["id", "ASC"]],
+      });
+    }
+    setCompletionStatus(completed) {
+      return this.update({ completed: completed });
+    }
   }
   Todo.init(
     {
