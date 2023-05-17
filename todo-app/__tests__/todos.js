@@ -19,7 +19,7 @@ function extractCsrfToken(res) {
 describe("Todo test suite", function () {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
-    server = app.listen(3000, () => { });
+    server = app.listen(4000, () => { });
     agent = request.agent(server);
   });
 
@@ -74,7 +74,7 @@ describe("Todo test suite", function () {
     csrfToken = extractCsrfToken(res);
 
     const markCompleteResponse1 = await agent
-      .put(`/todos/${latesttd.id}`)
+      .put(`/todos/${latestTodo.id}`)
       .send({
         _csrf: csrfToken,
         completed: false,
@@ -86,7 +86,7 @@ describe("Todo test suite", function () {
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
     let res = await agent.get("/");
     let csrfToken = extractCsrfToken(res);
-    await agent.delete("/todos").send({
+    await agent.post("/todos").send({
       title: "Buy fruits",
       dueDate: new Date().toISOString(),
       completed: false,
@@ -99,11 +99,11 @@ describe("Todo test suite", function () {
     const dueTodayCount = parsedGroupedResponse.dueTodayTodos.length;
     const latestTodo = parsedGroupedResponse.dueTodayTodos[dueTodayCount - 1];
     const todoID = latestTodo.id;
-//     var c = await agent.delete(`/todos/${todoID}`).send({ _csrf: csrfToken });
+    //     var c = await agent.delete(`/todos/${todoID}`).send({ _csrf: csrfToken });
 
-//     expect(c.text).toBe("true");
+    //     expect(c.text).toBe("true");
 
-//     c = await agent.delete(`/todos/${todoID}`).send({ _csrf: csrfToken });
-//     expect(c.text).toBe("false");
+    //     c = await agent.delete(`/todos/${todoID}`).send({ _csrf: csrfToken });
+    //     expect(c.text).toBe("false");
   });
 });
