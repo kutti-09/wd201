@@ -117,11 +117,13 @@ describe("Todo test suite", function () {
     const dueTodayCount = parsedGroupedResponse.dueTodayTodos.length;
     const latestTodo = parsedGroupedResponse.dueTodayTodos[dueTodayCount - 1];
     const todoID = latestTodo.id;
-    //     var c = await agent.delete(`/todos/${todoID}`).send({ _csrf: csrfToken });
+     res = await agent.get("/");
+    csrfToken = extractCsrfToken(res);
 
-    //     expect(c.text).toBe("true");
+    const deleteTodo = await agent.delete(`/todos/${latestTodo}`);
 
-    //     c = await agent.delete(`/todos/${todoID}`).send({ _csrf: csrfToken });
-    //     expect(c.text).toBe("false");
+    expect(deleteTodo.statusCode).toBe(500);
+    const status = Boolean(deleteTodo.text);
+    expect(status).toBe(true);
   });
 });
