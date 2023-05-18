@@ -17,8 +17,7 @@
                 method: "put",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    _csrf: token,
-                    completed: !completed
+                    _csrf: token
                 })
             })
                 .then((res) => {
