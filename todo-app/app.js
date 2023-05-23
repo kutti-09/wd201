@@ -117,7 +117,7 @@ app.get("/signup", (request, response) => {
   response.render("signup", { title: "Signup", csrfToken: request.csrfToken() })
 });
 
-app.post("/users", csrf.validate, async (request, response) => {
+app.post("/users", async (request, response) => {
   //Hashing the password using bcrypt
   const hashedPwd = await bcrypt.hash(request.body.Password, saltRounds)
   console.log(hashedPwd)
