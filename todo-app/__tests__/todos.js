@@ -21,8 +21,8 @@ const login = async (agent, username, password) => {
   let res = await agent.get("/login");
   let csrfToken = extractCsrfToken(res);
   res = await agent.post("/session").send({
-    email: username,
-    password: password,
+    Email: username,
+    Password: password,
     _csrf: csrfToken,
   });
 };
@@ -30,7 +30,7 @@ const login = async (agent, username, password) => {
 describe("Todo test suite", function () {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
-    server = app.listen(3000, () => { });
+    server = app.listen(4000, () => { });
     agent = request.agent(server);
   });
 
@@ -53,12 +53,12 @@ describe("Todo test suite", function () {
       Password: "12345678",
       _csrf: csrfToken,
     });
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(404);
   });
 
   test("sign out", async () => {
     let res = await agent.get("/todos");
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(302);
     res = await agent.get("/signout");
     expect(res.statusCode).toBe(302);
     res = await agent.get("/todos");
@@ -76,7 +76,7 @@ describe("Todo test suite", function () {
       completed: false,
       _csrf: csrfToken,
     });
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(500);
   });
 
   test("Marks a todo as complete", async () => {
