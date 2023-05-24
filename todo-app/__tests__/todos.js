@@ -162,7 +162,7 @@ describe("Todo test suite", function () {
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
 
-    const deleteTodo = await agent.delete(`/todos/${latestTodo}`).send({
+    const deleteTodo = await agent.delete(`/todos/${todoID}`).send({
       _csrf: csrfToken,
     });
     expect(deleteTodo.statusCode).toBe(200);
