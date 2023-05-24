@@ -109,25 +109,23 @@ describe("Todo test suite", function () {
     expect(parsedUpdateResponse.completed).toBe(true);
   });
 
-  test("Marks a todo as incomplte", async () => {
+  test("Marks a todo as Incomplete", async () => {
     const agent = request.agent(server);
-    await login(agent, "useragmail.com", "12345678");
-    res = await agent.get("/todos");
-    csrfToken = extractCsrfToken(res);
+    await login(agent, "usera@gmail.com", "12345678");
+    let res = await agent.get("/todos");
+    let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
       title: "Buy fruits",
       dueDate: new Date().toISOString(),
       completed: true,
-      _csrf: csrfToken,
+      _csrf: csrfToken
     });
-
     const groupedTodosResponse = await agent
       .get("/todos")
       .set("Accept", "application/json");
     const parsedGroupedResponse = JSON.parse(groupedTodosResponse.text);
     const dueTodayCount = parsedGroupedResponse.dueTodayTodos.length;
     const latestTodo = parsedGroupedResponse.dueTodayTodos[dueTodayCount - 1];
-
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
 
@@ -137,10 +135,10 @@ describe("Todo test suite", function () {
         _csrf: csrfToken,
         completed: false,
       });
-
     const parsedUpdateResponse = JSON.parse(markInCompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(false);
   });
+
   test("Deletes a todo ", async () => {
     const agent = request.agent(server);
     await login(agent, "usera@gmail.com", "12345678");
