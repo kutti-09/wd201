@@ -51,9 +51,6 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-                <!-- <h1>
-                    <%= "Welcome, " + user.FirstName + " " + user.LastName %>
-                </h1> -->
                 <a href="/signout">Signout</a>
                 <form action="/todos" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -73,13 +70,17 @@
                     </div>
                 </form>
                 <div>
-                    <%- include('todo.ejs',{ todotype : "Overdue" , todos : overdueTodos }) %>
+                    <%- include('todo.ejs',{ "todotype" : "Overdue" , "id" : "count-overdue" , "todos" : overdueTodos })
+                        %>
 
-                        <%- include('todo.ejs',{ todotype : "Due Today" , todos : dueTodayTodos }) %>
+                        <%- include('todo.ejs',{ "todotype" : "Due Today" , "id" : "count-due-today" , "todos" :
+                            dueTodayTodos }) %>
 
-                            <%- include('todo.ejs',{ todotype : "Due Later" ,todos : dueLaterTodos }) %>
+                            <%- include('todo.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
+                                dueLaterTodos }) %>
 
-                                <%- include('todo.ejs',{ todotype : "Completed Items" , todos : completedTodos }) %>
+                                <%- include('todo.ejs',{ "todotype" : "Completed Items" , "id" : "count-completed-items"
+                                    , "todos" : completedTodos }) %>
 
                                     <% if(messages && messages.error && messages.error.length> 0) { %>
                                         <% for(var i=0; i<messages.error.length; i++) { %>
