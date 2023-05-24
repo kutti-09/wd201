@@ -48,11 +48,11 @@ passport.use(new LocalStrategy({
 }, (username, password, done) => {
   User.findOne({
     where: {
-      email: username
+      Email: username
     }
   })
     .then(async (user) => {
-      const result = await bcrypt.compare(password, user.password)
+      const result = await bcrypt.compare(password, user.Password)
       if (result) {
         return done(null, user);
       } else {
