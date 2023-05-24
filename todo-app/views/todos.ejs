@@ -51,7 +51,6 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-                <a href="/signout">Signout</a>
                 <form action="/todos" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <div class="flex py-5 gap-2">
@@ -90,6 +89,8 @@
                                             <% } %>
                                                 <% } %>
                 </div>
+                <br><a href="/signout" style="color: rgb(77, 141, 150); text-decoration: underline;"> Signout
+                    Account</a>
         </div>
     </div>
 </body>
