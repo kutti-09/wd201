@@ -51,16 +51,20 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
+                <!-- <h1>
+                    <%= "Welcome, " + user.FirstName + " " + user.LastName %>
+                </h1> -->
+                <a href="/signout">Signout</a>
                 <form action="/todos" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <div class="flex py-5 gap-2">
                         <div class="flex-auto">
                             <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm" type="text"
-                                name="title" placeholder="Enter Todo" required>
+                                name="title" placeholder="Enter Todo">
                         </div>
                         <div class="flex-auto">
                             <input class="border border-gray-300 text-gray-900 w-full rounded p-2 text-sm leading-4"
-                                type="date" name="dueDate" required>
+                                type="date" name="dueDate">
                         </div>
                         <div class="flex-none">
                             <button class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2"
@@ -69,17 +73,21 @@
                     </div>
                 </form>
                 <div>
-                    <%- include('todo.ejs',{ "todotype" : "Overdue" , "id" : "count-overdue" , "todos" : overdueTodos })
-                        %>
+                    <%- include('todo.ejs',{ todotype : "Overdue" , todos : overdueTodos }) %>
 
-                        <%- include('todo.ejs',{ "todotype" : "Due Today" , "id" : "count-due-today" , "todos" :
-                            dueTodayTodos }) %>
+                        <%- include('todo.ejs',{ todotype : "Due Today" , todos : dueTodayTodos }) %>
 
-                            <%- include('todo.ejs',{ "todotype" : "Due Later" , "id" : "count-due-later" , "todos" :
-                                dueLaterTodos }) %>
+                            <%- include('todo.ejs',{ todotype : "Due Later" ,todos : dueLaterTodos }) %>
 
-                                <%- include('todo.ejs',{ "todotype" : "Completed Items" , "id" : "count-completed-items"
-                                    , "todos" : completedTodos }) %>
+                                <%- include('todo.ejs',{ todotype : "Completed Items" , todos : completedTodos }) %>
+
+                                    <% if(messages && messages.error && messages.error.length> 0) { %>
+                                        <% for(var i=0; i<messages.error.length; i++) { %>
+                                            <li>
+                                                <%= messages.error[i] %><br>
+                                            </li>
+                                            <% } %>
+                                                <% } %>
                 </div>
         </div>
     </div>
