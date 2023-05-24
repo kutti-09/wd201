@@ -8,65 +8,74 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Todo.belongsTo(models.User, {
+        foreignKey: 'userId'
+      })
       // define association here
     }
-    static addTodo({ title, dueDate }) {
-      if (!title) {
-        throw new Error("Title is required.");
-      }
-      if (!dueDate) {
-        throw new Error("Due date is required.");
-      }
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+
+    static addTodo({ title, dueDate, userId }) {
+      return this.create({ title: title, dueDate: dueDate, completed: false, userId });
     }
-    static getTodos() {
-      return this.findAll();
-    }
-    static getoverdueTodos() {
+
+    static getoverdueTodos(userId) {
       return this.findAll({
         where: {
-          completed: false,
           dueDate: {
             [Op.lt]: new Date().toISOString().split("T")[0],
           },
-        },
-      });
-    }
-    static getdueTodayTodos() {
-      return this.findAll({
-        where: {
+          userId,
           completed: false,
-          dueDate: {
-            [Op.eq]: new Date().toISOString().split("T")[0],
-          },
-        },
-      });
-    }
-    static async getdueLaterTodos() {
-      return this.findAll({
-        where: {
-          completed: false,
-          dueDate: {
-            [Op.gt]: new Date().toISOString().split("T")[0],
-          }
-        },
-      });
-    }
-    static async remove(id) {
-      return this.destroy({
-        where: {
-          id,
-        },
-      });
-    }
-    static async getCompletedTodos() {
-      return this.findAll({
-        where: {
-          completed: true,
         },
         order: [["id", "ASC"]],
       });
     }
+
+    static getdueTodayTodos(userId) {
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.eq]: new Date().toISOString().split("T")[0],
+          },
+          completed: false,
+          userId,
+        },
+        order: [["id", "ASC"]],
+      });
+    }
+
+    static async getdueLaterTodos(userId) {
+      return this.findAll({
+        where: {
+          dueDate: {
+            [Op.gt]: new Date().toISOString().split("T")[0],
+          },
+          userId,
+          completed: false,
+        },
+        order: [["id", "ASC"]],
+      });
+    }
+
+    static async remove(id, userId) {
+      return this.destroy({
+        where: {
+          id,
+          userId
+        },
+      });
+    }
+
+    static async getCompletedTodos(userId) {
+      return this.findAll({
+        where: {
+          completed: true,
+          userId
+        },
+        order: [["id", "ASC"]],
+      });
+    }
+
     setCompletionStatus(completed) {
       return this.update({ completed: completed });
     }
