@@ -95,6 +95,7 @@ app.get("/todos", connectEnsureLogin.ensureLoggedIn(), async (request, response)
   const completedTodos = await Todo.getCompletedTodos(loggedInUser);
   if (request.accepts("html")) {
     response.render("todos", {
+      loggedInUser: request.user,
       overdueTodos,
       dueTodayTodos,
       dueLaterTodos,
@@ -103,6 +104,7 @@ app.get("/todos", connectEnsureLogin.ensureLoggedIn(), async (request, response)
     });
   } else {
     response.json({
+      userId: loggedInUser,
       overdueTodos,
       dueTodayTodos,
       dueLaterTodos,
@@ -120,8 +122,6 @@ app.get("/signup", (request, response) => {
 
 app.post("/users", async (request, response) => {
   //Hashing the password using bcrypt
-  const hashedPwd = await bcrypt.hash(request.body.Password, saltRounds);
-  console.log(hashedPwd);
   if (request.body.FirstName.length == 0) {
     request.flash("error", "FIRST NAME CAN'T BE EMPTY!");
     return response.redirect("/signup");
@@ -132,6 +132,8 @@ app.post("/users", async (request, response) => {
     request.flash("error", "PASSWORD IS MANDATORY!");
     return response.redirect("/signup");
   }
+  const hashedPwd = await bcrypt.hash(request.body.Password, saltRounds);
+  console.log(hashedPwd);
   try {
     const user = await User.create({
       FirstName: request.body.FirstName,
