@@ -50,7 +50,14 @@
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
-            <%- include('header.ejs') %>
+            <%- include('header.ejs') %><br>
+                <div>
+                    <%= "Welcome, " + loggedInUser.FirstName + " " + loggedInUser.LastName %>
+                </div>
+                <br><a href="/" style="color: rgb(77, 141, 150); text-decoration: underline;">Home Page</a><br>
+                <a href="/signup" style="color: rgb(77, 141, 150); text-decoration: underline;">Sign up with a new
+                    account</a><br>
+                <a href="/login" style="color: rgb(77, 141, 150); text-decoration: underline;">Login</a><br>
                 <form action="/todos" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <div class="flex py-5 gap-2">
@@ -93,6 +100,7 @@
                     Account</a>
         </div>
     </div>
+
 </body>
 
 </html>
